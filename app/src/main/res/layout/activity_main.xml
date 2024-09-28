@@ -27,7 +27,7 @@
             android:textColor="@color/white"
             android:textAlignment="center"
             android:fontFamily="@font/baloo"
-            android:text="Chat instantáneo sin complicaciones. Regístrate y comienza a vivir la experiencia. \n ¡Comunícate fácil y sin límites con SwiftTalk!"
+            android:text="Chat instantáneo sin complicaciones. \nRegístrate y comienza a vivir la experiencia. \n ¡Comunícate fácil y sin límites con SwiftTalk!"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
