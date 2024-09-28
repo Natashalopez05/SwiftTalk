@@ -29,15 +29,15 @@ public class MainActivity extends AppCompatActivity {
       return insets;
     });
 
-//    // LogIn button action
-//    Button loginButton = findViewById(R.id.login_button);
-//    loginButton.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        Intent intent = new Intent(MainActivity.this, LogInActivity.class);
-//        startActivity(intent);
-//      }
-//    });
+    // LogIn button action
+    Button loginButton = findViewById(R.id.login_button);
+    loginButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, LogInActivity.class);
+        startActivity(intent);
+      }
+    });
 //
 //    // Register button action
 //    Button registerButton = findViewById(R.id.register_button);
