@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_background"
+        tools:context=".MainActivity">
+
+
+    <ImageView
+            android:id="@+id/my_image_view"
+            android:layout_width="937px"
+            android:layout_height="375px"
+            android:src="@drawable/logo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="36dp"
+            tools:ignore="PxUsage"/>
+
+    <TextView
+            android:layout_width="885px"
+            android:layout_height="173px"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:fontFamily="@font/baloo"
+            android:text="Ingresa tus datos."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.252"
+            app:layout_constraintHorizontal_bias="0.486"
+            tools:ignore="HardcodedText,PxUsage"/>
+
+    <LinearLayout
+            android:layout_width="868px"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="PxUsage"
+            app:layout_constraintVertical_bias="0.538">
+
+        <EditText
+                android:id="@+id/name_field"
+                android:layout_width="match_parent"
+                android:layout_height="148px"
+                android:autofillHints="nombre"
+                android:hint="Nombre"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp"
+                android:background="@drawable/rounded_button"
+                tools:ignore="HardcodedText,PxUsage"/>
+
+        <EditText
+                android:id="@+id/last_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="148px"
+                android:autofillHints="apellido"
+                android:hint="Apellido"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="16dp"
+                tools:ignore="HardcodedText,PxUsage"/>
+
+        <EditText
+                android:id="@+id/email_field"
+                android:layout_width="match_parent"
+                android:layout_height="148px"
+                android:autofillHints="email"
+                android:hint="Correo electrónico"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="16dp"
+                tools:ignore="HardcodedText,PxUsage"/>
+
+
+        <EditText
+                android:id="@+id/password_field"
+                android:layout_width="match_parent"
+                android:layout_height="148px"
+                android:autofillHints="password"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:drawablePadding="8dp"
+                android:background="@drawable/rounded_button"
+                android:layout_marginTop="16dp"
+                tools:ignore="HardcodedText"/>
+
+    </LinearLayout>
+
+    <Button
+            android:id="@+id/login_button"
+            android:layout_width="444px"
+            android:layout_height="148px"
+            android:background="@drawable/rounded_button_inverted"
+            android:focusable="true"
+            android:text="Registrate"
+            android:textColor="@color/white"
+            android:fontFamily="@font/baloo_bold"
+            android:textSize="50px"
+            android:clickable="true"
+            android:gravity="center"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.807"
+            tools:ignore="HardcodedText,PxUsage"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

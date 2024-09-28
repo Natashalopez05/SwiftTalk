@@ -38,15 +38,15 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
       }
     });
-//
-//    // Register button action
-//    Button registerButton = findViewById(R.id.register_button);
-//    registerButton.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-//        startActivity(intent);
-//      }
-//    });
+
+    // Register button action
+    Button registerButton = findViewById(R.id.register_button);
+    registerButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        startActivity(intent);
+      }
+    });
   }
 }
