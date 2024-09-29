@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">SwiftTalk</string>
+    <string name="app_desc">Chat instantáneo sin complicaciones. \nRegístrate y comienza a vivir la experiencia. \n ¡Comunícate fácil y sin límites con Swift Talk!</string>
+    <string name="get_data">Ingresa tus datos</string>
+    <string name="email_hint">Correo electrónico</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="name_hint">Nombre</string>
+    <string name="last_name_hint">Apellido</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="register_button">Registrate</string>
+    <string name="login_error">Error al iniciar sesión</string>
+    <string name="register_error">Error al registrarse</string>
+    <string name="register_success">Registro exitoso</string>
+    <string name="login_success">Inicio de sesión exitoso</string>
+    <string name="logout_success">Cierre de sesión exitoso</string>
+    <string name="logout_error">Error al cerrar sesión</string>
+    <string name="email_error">Correo electrónico inválido</string>
+    <string name="password_error">Contraseña inválida</string>
+    <string name="password_length_error">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="password_match_error">Las contraseñas no coinciden</string>
 </resources>
