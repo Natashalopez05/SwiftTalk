@@ -12,18 +12,17 @@
 
     <ImageView
             android:id="@+id/my_image_view"
-            android:layout_width="937px"
-            android:layout_height="375px"
+            android:layout_width="350dp"
+            android:layout_height="150dp"
             android:src="@drawable/logo"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="40dp"
-            android:layout_marginStart="36dp"
-            tools:ignore="PxUsage"/>
+            android:layout_marginStart="36dp"/>
 
     <TextView
-            android:layout_width="885px"
-            android:layout_height="173px"
+            android:layout_width="340dp"
+            android:layout_height="85dp"
             android:textColor="@color/white"
             android:textAlignment="center"
             android:fontFamily="@font/baloo"
@@ -34,18 +33,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.252"
             app:layout_constraintHorizontal_bias="0.486"
-            tools:ignore="HardcodedText,PxUsage"/>
+            tools:ignore="HardcodedText"/>
 
     <Button
             android:id="@+id/login_button"
-            android:layout_width="444px"
-            android:layout_height="148px"
+            android:layout_width="170dp"
+            android:layout_height="57dp"
             android:background="@drawable/rounded_button"
             android:focusable="true"
             android:text="Iniciar Sesión"
             android:textColor="@color/orange"
             android:fontFamily="@font/baloo_bold"
-            android:textSize="50px"
+            android:textSize="19sp"
             android:clickable="true"
             android:gravity="center"
             app:backgroundTint="@null"
@@ -54,18 +53,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.634"
-            tools:ignore="HardcodedText,PxUsage"/>
+            tools:ignore="HardcodedText"/>
 
     <Button
             android:id="@+id/register_button"
-            android:layout_width="444px"
-            android:layout_height="148px"
+            android:layout_width="170dp"
+            android:layout_height="57dp"
             android:background="@drawable/rounded_button_inverted"
             android:focusable="true"
             android:text="Registrate"
             android:textColor="@color/white"
             android:fontFamily="@font/baloo_bold"
-            android:textSize="50px"
+            android:textSize="20sp"
             android:clickable="true"
             android:gravity="center"
             app:backgroundTint="@null"
@@ -74,6 +73,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.717"
-            tools:ignore="HardcodedText,PxUsage"/>
+            tools:ignore="HardcodedText"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
