@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "27975204953",
+    "project_id": "swifttalk-de338",
+    "storage_bucket": "swifttalk-de338.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27975204953:android:f015545378b9dbe04eb148",
+        "android_client_info": {
+          "package_name": "com.example.swifttalk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAShyXrs4Y2EjZ0GoNkr7g4g9AAHcQfeWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
