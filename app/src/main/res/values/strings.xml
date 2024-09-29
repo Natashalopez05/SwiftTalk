@@ -18,4 +18,5 @@
     <string name="password_error">Contraseña inválida</string>
     <string name="password_length_error">La contraseña debe tener al menos 6 caracteres</string>
     <string name="password_match_error">Las contraseñas no coinciden</string>
+    <string name="logo">Swift Talk app logo</string>
 </resources>
