@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:autofillHints="nombre"
-                android:hint="Nombre"
+                android:hint="@string/name_hint"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="@color/black"
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:autofillHints="apellido"
-                android:hint="Apellido"
+                android:hint="@string/last_name_hint"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="@color/black"
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:autofillHints="email"
-                android:hint="Correo electrónico"
+                android:hint="@string/email_hint"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="@color/black"
@@ -93,35 +93,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:autofillHints="password"
-                android:hint="Contraseña"
+                android:hint="@string/password_hint"
                 android:inputType="textPassword"
                 android:padding="12dp"
                 android:textColor="@color/black"
                 android:drawablePadding="8dp"
                 android:background="@drawable/rounded_button"
-                android:layout_marginTop="16dp"
-                tools:ignore="HardcodedText"/>
-
+                android:layout_marginTop="16dp" />
     </LinearLayout>
 
-    <Button
-            android:id="@+id/login_button"
+    <include
+            layout="@layout/fr_register_button"
             android:layout_width="170dp"
             android:layout_height="57dp"
-            android:background="@drawable/rounded_button_inverted"
-            android:focusable="true"
-            android:text="Registrate"
-            android:textColor="@color/white"
-            android:fontFamily="@font/baloo_bold"
-            android:textSize="20sp"
-            android:clickable="true"
-            android:gravity="center"
-            app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.807"
-            tools:ignore="HardcodedText,PxUsage"/>
+            app:layout_constraintVertical_bias="0.797"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
