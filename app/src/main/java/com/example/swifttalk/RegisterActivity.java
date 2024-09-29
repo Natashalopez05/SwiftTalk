@@ -12,12 +12,18 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
   EditText nameEdit, lastnameEdit, emailEdit, passwordEdit;
   Button registerButton;
   FirebaseAuth auth = FirebaseAuth.getInstance();
+  FirebaseFirestore db = FirebaseFirestore.getInstance();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +58,26 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            Toast.makeText(RegisterActivity.this, "Usuario registrado: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-            finish();
+            if (user == null) {
+                Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Map<String, Object> userData = new HashMap<>();
+            userData.put("name", name);
+            userData.put("last_name", lastname);
+            userData.put("email", email);
+            userData.put("created_at", new Date());
+
+            db.collection("users").document(user.getUid())
+              .set(userData)
+              .addOnSuccessListener(aVoid -> {
+                Toast.makeText(RegisterActivity.this, "Usuario registrado: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
+                finish();
+              })
+              .addOnFailureListener(e -> {
+                Toast.makeText(RegisterActivity.this, "Error al guardar los datos del usuario", Toast.LENGTH_SHORT).show();
+              });
           });
       }
     });

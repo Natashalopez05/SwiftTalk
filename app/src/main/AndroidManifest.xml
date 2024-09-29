@@ -28,5 +28,4 @@
                 android:name=".RegisterActivity"
                 android:exported="true"/>
     </application>
-
 </manifest>

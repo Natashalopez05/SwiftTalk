@@ -19,6 +19,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentReference;
 
 public class LogInActivity  extends AppCompatActivity {
 
@@ -57,9 +59,26 @@ public class LogInActivity  extends AppCompatActivity {
               }
 
               FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-              Log.i("AuthStateListener", "Usuario: " + user.getEmail());
-              Toast.makeText(LogInActivity.this, "Bienvenido: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-              finish();
+              if(user == null) {
+                Toast.makeText(LogInActivity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
+                return;
+              }
+
+              FirebaseFirestore db = FirebaseFirestore.getInstance();
+              DocumentReference userRef = db.collection("users").document(user.getUid());
+              userRef.get().addOnSuccessListener(documentSnapshot -> {
+                if(!documentSnapshot.exists()) {
+                  Toast.makeText(LogInActivity.this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+                  return;
+                }
+
+                String name = documentSnapshot.getString("name");
+                String lastname = documentSnapshot.getString("last_name");
+                Toast.makeText(LogInActivity.this, "Bienvenido: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
+                finish();
+              }).addOnFailureListener(e -> {
+                Toast.makeText(LogInActivity.this, "Error al leer los datos" + e.toString(), Toast.LENGTH_SHORT).show();
+              });
             }
           });
       }
