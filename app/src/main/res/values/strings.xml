@@ -24,4 +24,10 @@
     <string name="text_template">Hello World</string>
     <string name="user_name_template">Vladimir Curiel</string>
     <string name="date_template">30/11/2024</string>
+    <string name="back_button">Botón de regreso</string>
+    <string name="info_button">Botón de información</string>
+    <string name="menu_button">Botón de menú</string>
+    <string name="image_button">Botón de imagen</string>
+    <string name="send_message">Botón de enviar mensaje</string>
+    <string name="message_hint">Escribe tu mensaje</string>
 </resources>
