@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,8 +23,21 @@ public class RegisterActivity extends AppCompatActivity {
 
   EditText nameEdit, lastnameEdit, emailEdit, passwordEdit;
   Button registerButton;
+  ProgressBar progressBar;
   FirebaseAuth auth = FirebaseAuth.getInstance();
   FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+  public void switchLoadingState(boolean isLoading) {
+    if(isLoading) {
+      progressBar.setVisibility(View.VISIBLE);
+      registerButton.setEnabled(false);
+      registerButton.setVisibility(View.INVISIBLE);
+    } else {
+      progressBar.setVisibility(View.INVISIBLE);
+      registerButton.setEnabled(true);
+      registerButton.setVisibility(View.VISIBLE);
+    }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
     emailEdit = findViewById(R.id.email_field);
     passwordEdit = findViewById(R.id.password_field);
     registerButton = findViewById(R.id.register_button);
+    progressBar = findViewById(R.id.progressBar);
 
     registerButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -50,17 +65,20 @@ public class RegisterActivity extends AppCompatActivity {
           return;
         }
 
+        switchLoadingState(true);
         auth.createUserWithEmailAndPassword(email, password)
           .addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
+              switchLoadingState(false);
               Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
               return;
             }
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user == null) {
-                Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
-                return;
+              switchLoadingState(false);
+              Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
+              return;
             }
 
             Map<String, Object> userData = new HashMap<>();
@@ -72,10 +90,12 @@ public class RegisterActivity extends AppCompatActivity {
             db.collection("users").document(user.getUid())
               .set(userData)
               .addOnSuccessListener(aVoid -> {
+                switchLoadingState(false);
                 Toast.makeText(RegisterActivity.this, "Usuario registrado: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
                 finish();
               })
               .addOnFailureListener(e -> {
+                switchLoadingState(false);
                 Toast.makeText(RegisterActivity.this, "Error al guardar los datos del usuario", Toast.LENGTH_SHORT).show();
               });
           });
