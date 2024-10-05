@@ -1,14 +1,17 @@
 package com.example.swifttalk.logic.models.Chats;
 import com.example.swifttalk.logic.models.Messages.LastMessage;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class Chat {
-  private final String id;
-  private final String userCover;
-  private final LastMessage lastMessage;
-  private final Timestamp timestamp;
-  private final Set<String> users;
+  private String id;
+  private String userCover;
+  private LastMessage lastMessage;
+  private Timestamp timestamp;
+  private Set<String> users;
 
   public Chat(String id, String userCover, LastMessage lastMessage, Timestamp timestamp, Set<String> users) {
     this.id = id;
@@ -16,6 +19,9 @@ public abstract class Chat {
     this.lastMessage = lastMessage;
     this.timestamp = timestamp;
     this.users = users;
+  }
+
+  public Chat() {
   }
 
   public String getId() {
@@ -36,5 +42,12 @@ public abstract class Chat {
 
   public Set<String> getMembers() {
     return users;
+  }
+
+  public static Chat createFromDatabase(DocumentSnapshot document, String userEmail) {
+    int amountOfUsers = Objects.requireNonNull(document.get("users")).toString().split(",").length;
+    return PrivateChat.createFromDatabase(document, userEmail);
+
+    //TODO IF GREATER THAN 2 THEN GROUP CHAT
   }
 }

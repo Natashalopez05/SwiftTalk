@@ -3,19 +3,24 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import org.parceler.Parcel;
 
+import java.util.Map;
+
 @Parcel
 public class LastMessage {
-  private final String context;
-  private final Timestamp timestamp;
+  private String context;
+  private Timestamp timestamp;
+
+  public LastMessage() {
+  }
 
   public LastMessage(String context, Timestamp timestamp) {
     this.context = context;
     this.timestamp = timestamp;
   }
 
-  public static LastMessage createFromDatabase(DocumentSnapshot document) {
-    String context = document.getString("context");
-    Timestamp timestamp = document.getTimestamp("timestamp");
+  public static LastMessage createFromDatabase(Map<String, Object> document) {
+    String context = (String) document.get("context");
+    Timestamp timestamp = (Timestamp) document.get("timestamp");
 
     return new LastMessage(context, timestamp);
   }
