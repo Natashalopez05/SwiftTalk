@@ -1,11 +1,11 @@
 package com.example.swifttalk;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,7 +15,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +25,20 @@ public class LogInActivity  extends AppCompatActivity {
 
   EditText emailEdit, passwordEdit;
   Button loginButton;
+  ProgressBar progressBar;
   FirebaseAuth auth = FirebaseAuth.getInstance();
+
+  public void switchLoadingState(boolean isLoading) {
+    if(isLoading) {
+      progressBar.setVisibility(View.VISIBLE);
+      loginButton.setEnabled(false);
+      loginButton.setVisibility(View.INVISIBLE);
+    } else {
+      progressBar.setVisibility(View.INVISIBLE);
+      loginButton.setEnabled(true);
+      loginButton.setVisibility(View.VISIBLE);
+    }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,7 @@ public class LogInActivity  extends AppCompatActivity {
     emailEdit = findViewById(R.id.email_field);
     passwordEdit = findViewById(R.id.password_field);
     loginButton = findViewById(R.id.login_button);
+    progressBar = findViewById(R.id.progressBar);
 
     loginButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -49,17 +62,21 @@ public class LogInActivity  extends AppCompatActivity {
           return;
         }
 
+        switchLoadingState(true);
+
         auth.signInWithEmailAndPassword(email, password)
           .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
               if(!task.isSuccessful()) {
+                switchLoadingState(false);
                 Toast.makeText(LogInActivity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
                 return;
               }
 
               FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
               if(user == null) {
+                switchLoadingState(false);
                 Toast.makeText(LogInActivity.this, "Error al iniciar sesión", Toast.LENGTH_SHORT).show();
                 return;
               }
@@ -68,6 +85,7 @@ public class LogInActivity  extends AppCompatActivity {
               DocumentReference userRef = db.collection("users").document(user.getUid());
               userRef.get().addOnSuccessListener(documentSnapshot -> {
                 if(!documentSnapshot.exists()) {
+                  switchLoadingState(false);
                   Toast.makeText(LogInActivity.this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
                   return;
                 }
@@ -75,8 +93,12 @@ public class LogInActivity  extends AppCompatActivity {
                 String name = documentSnapshot.getString("name");
                 String lastname = documentSnapshot.getString("last_name");
                 Toast.makeText(LogInActivity.this, "Bienvenido: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
-                finish();
+                switchLoadingState(false);
+
+                Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+                startActivity(intent);
               }).addOnFailureListener(e -> {
+                switchLoadingState(false);
                 Toast.makeText(LogInActivity.this, "Error al leer los datos" + e.toString(), Toast.LENGTH_SHORT).show();
               });
             }
@@ -90,4 +112,6 @@ public class LogInActivity  extends AppCompatActivity {
       return insets;
     });
   }
+
+
 }

@@ -19,4 +19,16 @@
     <string name="password_length_error">La contraseña debe tener al menos 6 caracteres</string>
     <string name="password_match_error">Las contraseñas no coinciden</string>
     <string name="logo">Swift Talk app logo</string>
+    <string name="floating_button">Iniciar un chat nuevo</string>
+    <string name="user_cover">Imagen de perfil del usuario</string>
+    <string name="text_template">Hello World</string>
+    <string name="user_name_template">Vladimir Curiel</string>
+    <string name="date_template">30/11/2024</string>
+    <string name="back_button">Botón de regreso</string>
+    <string name="info_button">Botón de información</string>
+    <string name="menu_button">Botón de menú</string>
+    <string name="image_button">Botón de imagen</string>
+    <string name="send_message">Botón de enviar mensaje</string>
+    <string name="message_hint">Escribe tu mensaje</string>
+    <string name="timestamp_template">3:54 p.m.</string>
 </resources>
