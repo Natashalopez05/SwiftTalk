@@ -23,7 +23,13 @@ import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
   FirebaseFirestore db = FirebaseFirestore.getInstance();
-  private final String userEmail = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail();
+  FirebaseAuth auth = FirebaseAuth.getInstance();
+
+  RecyclerView recyclerView;
+  ChatsAdapter adapter;
+  Toolbar toolbar;
+
+  private final String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
   final List<Chat> chats = new ArrayList<>();
   private EventListener<QuerySnapshot> listener;
 
@@ -41,14 +47,16 @@ public class HomeActivity extends AppCompatActivity {
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_home);
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    //TODO ADD LOGOUT TO TOOLBAR
+
+    toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     //TODO FLOATING ACTION BUTTON
 
-    RecyclerView recyclerView = findViewById(R.id.recyclerViewChats);
+    recyclerView = findViewById(R.id.recyclerViewChats);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    ChatsAdapter adapter = new ChatsAdapter(getApplicationContext(), chats);
+    adapter = new ChatsAdapter(getApplicationContext(), chats);
     recyclerView.setAdapter(adapter);
 
     listener = (value, error) -> {
@@ -63,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
     };
     getChats();
 
-    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.home), (v, insets) -> {
       Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
       v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
       return insets;
