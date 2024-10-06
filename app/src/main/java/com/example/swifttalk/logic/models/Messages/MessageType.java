@@ -14,4 +14,13 @@ public enum MessageType {
   public String getType() {
     return type;
   }
+
+  public static MessageType fromString(String text) {
+    for (MessageType messageType : MessageType.values()) {
+      if (messageType.type.equalsIgnoreCase(text)) {
+        return messageType;
+      }
+    }
+    throw new IllegalArgumentException("Invalid message type: " + text);
+  }
 }

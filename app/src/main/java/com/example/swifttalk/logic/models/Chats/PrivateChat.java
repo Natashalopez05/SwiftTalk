@@ -15,7 +15,6 @@ public class PrivateChat extends Chat {
     super(id, userCover, lastMessage, createdAt, users);
   }
 
-
   public static PrivateChat createFromDatabase(DocumentSnapshot document, String userEmail) {
     String id = document.getId();
     LastMessage lastMessage = null;

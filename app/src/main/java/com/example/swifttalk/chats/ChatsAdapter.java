@@ -53,12 +53,12 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     chatViewHolder.nameView.setText(chat.getUserCover());
     chatViewHolder.userCoverView.setImageResource(R.drawable.user_cover);
 
-//    chatViewHolder.itemView.setOnClickListener(v -> {
-//      Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
-//      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//      intent.putExtra("chat", Parcels.wrap(chat));
-//      context.startActivity(intent);
-//    });
+    chatViewHolder.itemView.setOnClickListener(v -> {
+      Intent intent = new Intent(context.getApplicationContext(), ChatActivity.class);
+      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      intent.putExtra("chat", Parcels.wrap(chat));
+      context.startActivity(intent);
+    });
 
     if(lastMessage == null) {
       chatViewHolder.lastMessageView.setText("");

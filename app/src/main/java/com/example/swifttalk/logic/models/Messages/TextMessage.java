@@ -1,5 +1,6 @@
 package com.example.swifttalk.logic.models.Messages;
 
+import android.util.Log;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 
@@ -13,11 +14,12 @@ public class TextMessage extends Message {
 
   public static TextMessage createFromDatabase(DocumentSnapshot document) {
     String id = document.getId();
-    String sender = document.getString("userId");
+    String userEmail = document.getString("user");
     Timestamp timestamp = document.getTimestamp("timestamp");
     String context = document.getString("context");
+    if(userEmail == null) userEmail = "Unknown";
 
-    return new TextMessage(id, sender, timestamp, context);
+    return new TextMessage(id, userEmail, timestamp, context);
   }
 
   public String getContext() {
