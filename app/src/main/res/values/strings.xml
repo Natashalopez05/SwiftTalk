@@ -30,4 +30,5 @@
     <string name="image_button">Botón de imagen</string>
     <string name="send_message">Botón de enviar mensaje</string>
     <string name="message_hint">Escribe tu mensaje</string>
+    <string name="timestamp_template">3:54 p.m.</string>
 </resources>

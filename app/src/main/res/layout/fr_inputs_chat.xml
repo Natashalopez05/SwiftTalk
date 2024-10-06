@@ -7,7 +7,7 @@
         android:padding="8dp">
 
     <View
-        android:id="@+id/line"
+        android:id="@+id/lower_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/gray"
@@ -50,7 +50,8 @@
             android:inputType="text"
             android:padding="12dp"
             android:textColor="@color/black"
-            android:background="@drawable/rounded_button_gray"/>
+            android:background="@drawable/rounded_button_gray"
+            app:cursorColor="@color/orange"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView

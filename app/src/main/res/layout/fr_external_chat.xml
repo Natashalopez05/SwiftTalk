@@ -7,7 +7,7 @@
         android:padding="15dp">
 
     <ImageView
-        android:id="@+id/userCover"
+        android:id="@+id/user_cover"
         android:layout_width="62dp"
         android:layout_height="62dp"
         android:contentDescription="@string/user_cover"
@@ -18,20 +18,20 @@
         android:layout_marginTop="16dp" />
 
     <TextView
-            android:id="@+id/userName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:text="@string/user_name_template"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/userCover"
-            app:layout_constraintTop_toTopOf="@id/userCover"
-            app:layout_constraintEnd_toStartOf="@id/timestamp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+        android:id="@+id/user_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="@string/user_name_template"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/user_cover"
+        app:layout_constraintTop_toTopOf="@id/user_cover"
+        app:layout_constraintEnd_toStartOf="@id/timestamp"
+        app:layout_constraintHorizontal_bias="0.0"/>
 
     <TextView
-        android:id="@+id/lastMessage"
+        android:id="@+id/last_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -39,8 +39,8 @@
         android:text="@string/text_template"
         android:textColor="@color/gray"
         android:textSize="13sp"
-        app:layout_constraintStart_toEndOf="@id/userCover"
-        app:layout_constraintTop_toBottomOf="@id/userName"
+        app:layout_constraintStart_toEndOf="@id/user_cover"
+        app:layout_constraintTop_toBottomOf="@id/user_name"
         app:layout_constraintEnd_toStartOf="@id/timestamp"
         app:layout_constraintHorizontal_bias="0.0" />
 
@@ -52,7 +52,7 @@
         android:textAlignment="textEnd"
         android:textColor="@color/gray"
         android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="@id/userName"
+        app:layout_constraintTop_toTopOf="@id/user_name"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="16dp" />
 

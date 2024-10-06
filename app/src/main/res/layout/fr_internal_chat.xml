@@ -60,7 +60,7 @@
         app:layout_constraintHorizontal_bias="1.0" />
 
     <View
-        android:id="@+id/line"
+        android:id="@+id/upper_line"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/gray"

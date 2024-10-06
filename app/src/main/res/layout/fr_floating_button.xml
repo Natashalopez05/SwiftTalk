@@ -9,8 +9,8 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_button"
             android:layout_width="65dp"
-            android:layout_height="58dp"
-            android:layout_marginBottom="25dp"
+            android:layout_height="67dp"
+            android:layout_marginBottom="64dp"
             android:clickable="true"
             android:contentDescription="@string/floating_button"
             android:focusable="true"
@@ -21,6 +21,7 @@
             app:maxImageSize="37dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
