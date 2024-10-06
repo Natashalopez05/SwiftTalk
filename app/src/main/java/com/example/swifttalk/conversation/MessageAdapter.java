@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.swifttalk.R;
+import com.example.swifttalk.logic.models.Messages.ImageMessage;
 import com.example.swifttalk.logic.models.Messages.Message;
 import com.example.swifttalk.logic.models.Messages.TextMessage;
 import com.example.swifttalk.logic.utils.Utils;
@@ -52,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
   @Override
   public void onBindViewHolder(@NonNull MessageViewHolder messageViewHolder, int i) {
       final Message message = messages.get(i);
+      String image;
 
       final Date messageDate = message.getTimestamp().toDate();
       final boolean itsFromToday = Utils.isOlderThan(message.getTimestamp(), 1);
@@ -62,6 +65,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
       messageViewHolder.messageContext.setText(((TextMessage) message).getContext());
       messageViewHolder.messageContext.setVisibility(View.VISIBLE);
       messageViewHolder.messageImage.setVisibility(View.GONE);
+    }else if (message instanceof ImageMessage) {
+      image = ((ImageMessage) message).getImageUrl().toString();
+      Glide.with(context).load(image).into(messageViewHolder.messageImage);
+      messageViewHolder.messageContext.setVisibility(View.GONE);
+      messageViewHolder.messageImage.setVisibility(View.VISIBLE);
     }
     // TODO: Add ImageMessage logic
   }

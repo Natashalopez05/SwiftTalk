@@ -1,12 +1,13 @@
 package com.example.swifttalk;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.webkit.MimeTypeMap;
+import android.widget.*;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,6 +22,8 @@ import com.example.swifttalk.logic.models.Messages.MessageType;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -31,11 +34,15 @@ import java.util.Map;
 public class ChatActivity extends AppCompatActivity {
   FirebaseFirestore db = FirebaseFirestore.getInstance();
   FirebaseAuth auth = FirebaseAuth.getInstance();
+  FirebaseStorage storage = FirebaseStorage.getInstance();
+  StorageReference storageReference = storage.getReference("uploads");
 
   private String currentUserEmail = auth.getCurrentUser().getEmail();
   private RecyclerView recyclerView;
   private MessageAdapter messageAdapter;
   private List<Message> messages = new ArrayList<>();
+  private static final int PICK_IMAGE_REQUEST = 1;
+  private Uri imageUri;
 
   Chat chat;
   ImageView backButton, imageButton, sendButton;
@@ -60,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
 
     backButton.setOnClickListener(v -> finish());
     sendButton.setOnClickListener(v -> sendMessage(messageInput.getText().toString()));
+    imageButton.setOnClickListener(v -> openFileChooser());
 
     userName.setText(((PrivateChat) chat).getOtherUser(currentUserEmail).split("@")[0]);
     // TODO: Add group chat logic
@@ -92,13 +100,53 @@ public class ChatActivity extends AppCompatActivity {
       v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
       return insets;
     });
+
+  }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
+      if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+              && data != null && data.getData() != null){
+          imageUri = data.getData();
+          uploadImage();
+      }
+  }
+
+  private String getFileExtension(Uri uri){
+      ContentResolver contentResolver = getContentResolver();
+      MimeTypeMap mimeType = MimeTypeMap.getSingleton();
+      return mimeType.getExtensionFromMimeType(contentResolver.getType(uri));
+  }
+
+  private void openFileChooser() {
+    Intent intent = new Intent();
+    intent.setType("image/*");
+    intent.setAction(Intent.ACTION_GET_CONTENT);
+    startActivityForResult(intent, PICK_IMAGE_REQUEST);
+  }
+
+  private void uploadImage() {
+    if (imageUri == null) return;
+
+    StorageReference fileReference = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+    fileReference.putFile(imageUri)
+            .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
+              String imageUrl = uri.toString();
+              sendMessage(imageUrl); // Implement this method to send the message with the image URL
+            }))
+            .addOnFailureListener(e -> Toast.makeText(ChatActivity.this, "Failed", Toast.LENGTH_SHORT).show());
   }
 
   private void sendMessage(String message){
     if (message.isEmpty()) return;
 
-    //TODO: Add image message logic, identify the type of message using http to see if is an image url
-    Map<String, Object> messageMap = setTextMessage(message, currentUserEmail);
+    Map<String, Object> messageMap;
+    if (message.startsWith("https")) {
+      messageMap = setImageMessage(message, currentUserEmail);
+    } else {
+      messageMap = setTextMessage(message, currentUserEmail);
+    }
 
     db.collection("chats").document(chat.getId()).collection("messages")
       .add(messageMap)
@@ -127,8 +175,13 @@ public class ChatActivity extends AppCompatActivity {
     return messageMap;
   }
 
-  private Map<String, Object> setImageMessage() {
-    //TODO
-    return null;
+  private Map<String, Object> setImageMessage(String imageUrl, String sender) {
+    Map<String, Object> messageMap = new HashMap<>();
+    messageMap.put("context", imageUrl);
+    messageMap.put("user", sender);
+    messageMap.put("timestamp", Timestamp.now());
+    messageMap.put("type", MessageType.IMAGE);
+
+    return messageMap;
   }
 }

@@ -8,9 +8,9 @@ public class ImageMessage extends Message {
 
   public static ImageMessage createFromDatabase(DocumentSnapshot document) {
     String id = document.getId();
-    String sender = document.getString("sender");
+    String sender = document.getString("user");
     Timestamp timestamp = document.getTimestamp("timestamp");
-    URI imageUrl = URI.create(document.getString("imageUrl"));
+    URI imageUrl = URI.create(document.getString("context"));
 
     return new ImageMessage(id, sender, timestamp, imageUrl);
   }
