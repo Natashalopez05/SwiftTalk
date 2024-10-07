@@ -3,13 +3,11 @@ package com.example.swifttalk.logic.utils;
 import android.annotation.SuppressLint;
 import com.example.swifttalk.logic.models.Messages.MessageType;
 import com.google.firebase.Timestamp;
+
+import java.util.*;
 import java.util.regex.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Utils {
 
@@ -31,6 +29,16 @@ public class Utils {
     messageMap.put("type", MessageType.TEXT);
 
     return messageMap;
+  }
+
+  public static Map<String, Object> setChat(String currentUserEmail, String otherUserEmail) {
+    Map<String, Object> chatMap = new HashMap<>();
+    List<String> usersList = Arrays.asList(currentUserEmail, otherUserEmail);
+
+    chatMap.put("users", usersList);
+    chatMap.put("createdAt", Timestamp.now());
+
+    return chatMap;
   }
 
   public static Map<String, Object> setImageMessage(String imageUrl, String sender) {

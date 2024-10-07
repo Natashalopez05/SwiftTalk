@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/user_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="15dp">
@@ -18,7 +19,7 @@
         android:layout_marginTop="16dp" />
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/user_email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -27,11 +28,10 @@
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/user_cover"
         app:layout_constraintTop_toTopOf="@id/user_cover"
-        app:layout_constraintEnd_toStartOf="@id/timestamp"
         app:layout_constraintHorizontal_bias="0.0"/>
 
     <TextView
-        android:id="@+id/last_message"
+        android:id="@+id/user_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -40,20 +40,7 @@
         android:textColor="@color/gray"
         android:textSize="13sp"
         app:layout_constraintStart_toEndOf="@id/user_cover"
-        app:layout_constraintTop_toBottomOf="@id/user_name"
-        app:layout_constraintEnd_toStartOf="@id/timestamp"
+        app:layout_constraintTop_toBottomOf="@id/user_email"
         app:layout_constraintHorizontal_bias="0.0" />
-
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date_template"
-        android:textAlignment="textEnd"
-        android:textColor="@color/gray"
-        android:textSize="12sp"
-        app:layout_constraintTop_toTopOf="@id/user_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
