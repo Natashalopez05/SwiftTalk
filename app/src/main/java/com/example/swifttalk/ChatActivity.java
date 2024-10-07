@@ -23,6 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -142,6 +147,7 @@ public class ChatActivity extends AppCompatActivity {
         if (task.isSuccessful()) {
           messageInput.setText("");
           recyclerView.smoothScrollToPosition(messages.size() - 1);
+          sendNotification(message);
 
           //TODO: Add push notification logic
         } else {
@@ -152,4 +158,27 @@ public class ChatActivity extends AppCompatActivity {
     db.collection("chats").document(chat.getId())
       .update("last_message", messageMap);
   }
+
+    private void sendNotification(String message) {
+      // Seguir
+
+
+    }
+
+    private void callApi(JSONObject data) {
+      MediaType JSON = MediaType.get("application/json");
+      OkHttpClient client = new OkHttpClient();
+      String url = "https://fcm.googleapis.com/fcm/send";
+      RequestBody body = RequestBody.create(data.toString(), JSON);
+      Request request = new Request.Builder()
+        .url(url)
+        .post(body)
+        .addHeader("Authorization","Bearer " + auth.getAccessToken())
+        .addHeader("Content-Type","application/json")
+        .build();
+      client.newCall(request);
+
+    }
+
+
 }
