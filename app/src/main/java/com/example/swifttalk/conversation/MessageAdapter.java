@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.swifttalk.R;
 import com.example.swifttalk.logic.models.Messages.ImageMessage;
 import com.example.swifttalk.logic.models.Messages.Message;
@@ -20,10 +22,10 @@ import java.util.List;
 import java.util.Objects;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
-    private Context context;
-    private List<Message> messages;
-    private FirebaseAuth firebase = FirebaseAuth.getInstance();
-    private String currentUserEmail = Objects.requireNonNull(firebase.getCurrentUser()).getEmail();
+    private final Context context;
+    private final List<Message> messages;
+    private final FirebaseAuth firebase = FirebaseAuth.getInstance();
+    private final String currentUserEmail = Objects.requireNonNull(firebase.getCurrentUser()).getEmail();
 
   public MessageAdapter(Context context, List<Message> messages) {
     this.context = context;
@@ -61,17 +63,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
       final String timeToShow = itsFromToday ? Utils.getDate(messageDate) : Utils.getTimeInHour(messageDate);
       messageViewHolder.messageTimestamp.setText(timeToShow);
 
+    messageViewHolder.messageImage.setVisibility(View.GONE);
+    messageViewHolder.messageContext.setVisibility(View.GONE);
+
+    if (message instanceof ImageMessage) {
+      image = ((ImageMessage) message).getImageUrl().toString();
+      Glide.with(context).load(image).into(messageViewHolder.messageImage);
+      messageViewHolder.messageImage.setVisibility(View.VISIBLE);
+    }
+
     if (message instanceof TextMessage) {
       messageViewHolder.messageContext.setText(((TextMessage) message).getContext());
       messageViewHolder.messageContext.setVisibility(View.VISIBLE);
-      messageViewHolder.messageImage.setVisibility(View.GONE);
-    }else if (message instanceof ImageMessage) {
-      image = ((ImageMessage) message).getImageUrl().toString();
-      Glide.with(context).load(image).into(messageViewHolder.messageImage);
-      messageViewHolder.messageContext.setVisibility(View.GONE);
-      messageViewHolder.messageImage.setVisibility(View.VISIBLE);
     }
-    // TODO: Add ImageMessage logic
   }
 
   @Override

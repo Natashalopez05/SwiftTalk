@@ -97,6 +97,7 @@ public class LogInActivity  extends AppCompatActivity {
 
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                 startActivity(intent);
+                finish();
               }).addOnFailureListener(e -> {
                 switchLoadingState(false);
                 Toast.makeText(LogInActivity.this, "Error al leer los datos" + e.toString(), Toast.LENGTH_SHORT).show();
