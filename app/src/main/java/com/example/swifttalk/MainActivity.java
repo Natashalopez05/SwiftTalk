@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
   FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -66,6 +67,17 @@ public class MainActivity extends AppCompatActivity {
       Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
       v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
       return insets;
+    });
+
+    getFCMToken();
+
+
+  }
+  void getFCMToken() {
+    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+      if (task.isSuccessful()) {
+        String token = task.getResult();
+      }
     });
   }
 }

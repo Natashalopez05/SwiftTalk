@@ -52,6 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_chat);
 
+
     intent = getIntent();
     chat = Parcels.unwrap(intent.getParcelableExtra("chat"));
 
