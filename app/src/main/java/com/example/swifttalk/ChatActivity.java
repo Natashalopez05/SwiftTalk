@@ -39,7 +39,6 @@ public class ChatActivity extends AppCompatActivity {
   private RecyclerView recyclerView;
   private MessageAdapter messageAdapter;
   private final List<Message> messages = new ArrayList<>();
-  private Uri imageUri;
 
   Chat chat;
   ImageView backButton, imageButton, sendButton;
@@ -102,11 +101,10 @@ public class ChatActivity extends AppCompatActivity {
     super.onActivityResult(requestCode, resultCode, data);
     if(requestCode == 1 && resultCode == RESULT_OK
       && data != null && data.getData() != null){
-      imageUri = data.getData();
-      uploadFile();
+      Uri imageUri = data.getData();
+      uploadFile(imageUri);
     }
   }
-
   private void pickFile() {
     Intent intent = new Intent();
     intent.setType("image/*");
@@ -118,7 +116,7 @@ public class ChatActivity extends AppCompatActivity {
       MimeTypeMap mimeType = MimeTypeMap.getSingleton();
       return mimeType.getExtensionFromMimeType(contentResolver.getType(uri));
   }
-  private void uploadFile() {
+  private void uploadFile(Uri imageUri) {
     if (imageUri == null) return;
 
     String path = System.currentTimeMillis() + "." + getFileExtension(imageUri);

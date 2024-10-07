@@ -43,6 +43,13 @@ public class LogInActivity  extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    FirebaseUser user = auth.getCurrentUser();
+    if (user != null) {
+      Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
+      startActivity(intent);
+      finish();
+    }
+
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_login);
 

@@ -1,6 +1,7 @@
 package com.example.swifttalk;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +59,10 @@ public class HomeActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_logout) {
           FirebaseAuth.getInstance().signOut();
           Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+          Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+          startActivity(intent);
+          finish();
+
           finish();
           return true;
         }

@@ -1,5 +1,6 @@
 package com.example.swifttalk;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +43,12 @@ public class RegisterActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    FirebaseUser user = auth.getCurrentUser();
+    if (user != null) {
+      Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+      startActivity(intent);
+      finish();
+    }
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_register);
 
