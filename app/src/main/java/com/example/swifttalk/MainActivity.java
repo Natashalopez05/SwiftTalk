@@ -37,12 +37,6 @@ public class MainActivity extends AppCompatActivity {
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_main);
 
-    if(FirebaseAuth.getInstance().getCurrentUser() != null) {
-      Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-      startActivity(intent);
-      finish();
-    }
-
     Button loginButton = findViewById(R.id.login_button);
     loginButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -58,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View v) {
         Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
         startActivity(intent);
-        finish();
       }
     });
 

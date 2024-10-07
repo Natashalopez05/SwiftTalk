@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.swifttalk.chats.ChatsAdapter;
 import com.example.swifttalk.logic.models.Chats.Chat;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
 
@@ -34,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
   ChatsAdapter adapter;
   Toolbar toolbar;
   ImageView menuButton;
+  FloatingActionButton fab;
 
   private final String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
   final List<Chat> chats = new ArrayList<>();
@@ -49,6 +51,12 @@ public class HomeActivity extends AppCompatActivity {
 
     toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    fab = findViewById(R.id.floating_button);
+    fab.setOnClickListener(v -> {
+      Intent intent = new Intent(HomeActivity.this, InitChatActivity.class);
+      startActivity(intent);
+    });
 
     menuButton = findViewById(R.id.menuBtn);
     menuButton.setOnClickListener(v -> {
@@ -71,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
       popupMenu.show();
     });
 
-    //TODO FLOATING ACTION BUTTON
+
 
     recyclerView = findViewById(R.id.recyclerViewChats);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -67,6 +67,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatViewHolder> {
     }
 
     String lastMessageContext = lastMessage.getContext();
+    if (lastMessageContext.startsWith("https")) lastMessageContext = "\uD83D\uDCF8 Image";
     if (lastMessageContext.length() > 25) lastMessageContext = lastMessageContext.substring(0, 25) + "...";
     if (lastMessage.getUserEmail().equals(currentUserEmail)) {
       lastMessageContext = "You: " + lastMessageContext;
