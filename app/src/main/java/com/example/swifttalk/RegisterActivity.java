@@ -2,6 +2,7 @@ package com.example.swifttalk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -27,9 +29,10 @@ public class RegisterActivity extends AppCompatActivity {
   ProgressBar progressBar;
   FirebaseAuth auth = FirebaseAuth.getInstance();
   FirebaseFirestore db = FirebaseFirestore.getInstance();
+  FirebaseMessaging messaging = FirebaseMessaging.getInstance();
 
   public void switchLoadingState(boolean isLoading) {
-    if(isLoading) {
+    if (isLoading) {
       progressBar.setVisibility(View.VISIBLE);
       registerButton.setEnabled(false);
       registerButton.setVisibility(View.INVISIBLE);
@@ -74,38 +77,52 @@ public class RegisterActivity extends AppCompatActivity {
 
         switchLoadingState(true);
         auth.createUserWithEmailAndPassword(email, password)
-          .addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-              switchLoadingState(false);
-              Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
-              return;
-            }
+                .addOnCompleteListener(task -> {
+                  if (!task.isSuccessful()) {
+                    switchLoadingState(false);
+                    Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
+                    return;
+                  }
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user == null) {
-              switchLoadingState(false);
-              Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
-              return;
-            }
+                  FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                  if (user == null) {
+                    switchLoadingState(false);
+                    Toast.makeText(RegisterActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
+                    return;
+                  }
 
-            Map<String, Object> userData = new HashMap<>();
-            userData.put("name", name);
-            userData.put("last_name", lastname);
-            userData.put("email", email);
-            userData.put("created_at", new Date());
+                  Map<String, Object> userData = new HashMap<>();
+                  userData.put("name", name);
+                  userData.put("last_name", lastname);
+                  userData.put("email", email);
+                  userData.put("created_at", new Date());
 
-            db.collection("users").document(user.getUid())
-              .set(userData)
-              .addOnSuccessListener(aVoid -> {
-                switchLoadingState(false);
-                Toast.makeText(RegisterActivity.this, "Usuario registrado: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
-                finish();
-              })
-              .addOnFailureListener(e -> {
-                switchLoadingState(false);
-                Toast.makeText(RegisterActivity.this, "Error al guardar los datos del usuario", Toast.LENGTH_SHORT).show();
-              });
-          });
+                  db.collection("users").document(user.getUid())
+                          .set(userData)
+                          .addOnSuccessListener(aVoid -> {
+                            messaging.getToken().addOnCompleteListener(task1 -> {
+                              if (!task1.isSuccessful()) {
+                                Log.i("FCM Token: ", "Error al obtener el token", task1.getException());
+                                return;
+                              }
+                              // Obtain the new register token FCM
+                              String token = task1.getResult();
+                              // Save the token in the database
+                              db.collection("users").document(user.getUid())
+                                      .update("fcm_token", token)
+                                      .addOnCompleteListener(success -> Log.i("FCM Token", "Token guardado correctamente"))
+                                      .addOnFailureListener(e -> Log.e("FCM Token", "Error al guardar el token", e));
+                            });
+
+                            switchLoadingState(false);
+                            Toast.makeText(RegisterActivity.this, "Usuario registrado: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
+                            finish();
+                          })
+                          .addOnFailureListener(e -> {
+                            switchLoadingState(false);
+                            Toast.makeText(RegisterActivity.this, "Error al guardar los datos del usuario", Toast.LENGTH_SHORT).show();
+                          });
+                });
       }
     });
 

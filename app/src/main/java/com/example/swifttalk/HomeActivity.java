@@ -21,6 +21,7 @@ import com.example.swifttalk.logic.models.Chats.Chat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.*;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
       startActivity(intent);
     });
 
+
     menuButton = findViewById(R.id.menuBtn);
     menuButton.setOnClickListener(v -> {
       PopupMenu popupMenu = new PopupMenu(HomeActivity.this, menuButton);
@@ -65,12 +67,20 @@ public class HomeActivity extends AppCompatActivity {
 
       popupMenu.setOnMenuItemClickListener(item -> {
         if (item.getItemId() == R.id.action_logout) {
+          // Eliminar el token aquí
+          FirebaseMessaging.getInstance().deleteToken()
+                  .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                      Log.d("Logout", "Token eliminado exitosamente");
+                    } else {
+                      Log.e("Logout", "Error al eliminar el token", task.getException());
+                    }
+                  });
+
           FirebaseAuth.getInstance().signOut();
           Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
           Intent intent = new Intent(HomeActivity.this, MainActivity.class);
           startActivity(intent);
-          finish();
-
           finish();
           return true;
         }
@@ -78,8 +88,6 @@ public class HomeActivity extends AppCompatActivity {
       });
       popupMenu.show();
     });
-
-
 
     recyclerView = findViewById(R.id.recyclerViewChats);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));

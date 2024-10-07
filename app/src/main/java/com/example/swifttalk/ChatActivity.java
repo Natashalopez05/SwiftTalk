@@ -3,7 +3,9 @@ package com.example.swifttalk;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
 import androidx.activity.EdgeToEdge;
@@ -14,20 +16,31 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.swifttalk.conversation.MessageAdapter;
 import com.example.swifttalk.logic.models.Chats.Chat;
 import com.example.swifttalk.logic.models.Chats.PrivateChat;
 import com.example.swifttalk.logic.models.Messages.Message;
+import com.example.swifttalk.logic.models.User;
 import com.example.swifttalk.logic.utils.Utils;
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+
+import static android.content.ContentValues.TAG;
 
 public class ChatActivity extends AppCompatActivity {
   FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -134,6 +147,20 @@ public class ChatActivity extends AppCompatActivity {
     Map<String, Object> messageMap;
 
     messageMap = Utils.setMessage(message, currentUserEmail);
+    String otherUserEmail = ((PrivateChat) chat).getOtherUser(currentUserEmail);
+
+    db.collection("users").whereEqualTo("email", otherUserEmail)
+      .get()
+      .addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult().getDocuments().get(0);
+          User user = User.createFromDatabase(document);
+          String token = user.getFmcToken();
+          String titulo = "Nuevo mensaje de " + currentUserEmail;
+          String mensaje = message;
+          sendNotificationToUser(token, titulo, mensaje);
+        }
+      });
 
     db.collection("chats").document(chat.getId()).collection("messages")
       .add(messageMap)
@@ -141,8 +168,6 @@ public class ChatActivity extends AppCompatActivity {
         if (task.isSuccessful()) {
           messageInput.setText("");
           recyclerView.smoothScrollToPosition(messages.size() - 1);
-
-          //TODO: Add push notification logic
         } else {
           Toast.makeText(this, "Error sending message", Toast.LENGTH_SHORT).show();
         }
@@ -151,4 +176,75 @@ public class ChatActivity extends AppCompatActivity {
     db.collection("chats").document(chat.getId())
       .update("last_message", messageMap);
   }
+
+  private void sendNotificationToUser(String token, String title, String message) {
+    new SendNotificationToUser().execute(token, title, message);
+  }
+  private class SendNotificationToUser extends AsyncTask<String, Void, Void> {
+    @Override
+    protected Void doInBackground(String... params) {
+      String token = params[0];
+      String title = params[1];
+      String body = params[2];
+
+      try {
+        Log.d(TAG, "Token Chino: " + token);
+        String url = "https://fcm.googleapis.com/v1/projects/swifttalk-de338/messages:send";
+        String serverKey = getAccessToken();
+
+        JSONObject json = new JSONObject();
+        JSONObject message = new JSONObject();
+        JSONObject notification = new JSONObject();
+        notification.put("title", title);
+        notification.put("body", body);
+        message.put("token", token);
+        message.put("notification", notification);
+        json.put("message", message);
+
+        Log.d(TAG, "JSON Payload: " + json.toString());
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, json,
+                response -> Log.d(TAG, "Notification sent successfully"),
+                error -> {
+                  Log.e(TAG, "Error sending notification", error);
+                  if (error.networkResponse != null) {
+                    Log.e(TAG, "Status Code: " + error.networkResponse.statusCode);
+                    Log.e(TAG, "Response Data: " + new String(error.networkResponse.data));
+                  }
+                }
+        ) {
+          @Override
+          public Map<String, String> getHeaders() {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Authorization", "Bearer " + serverKey);
+            headers.put("Content-Type", "application/json");
+            return headers;
+          }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(ChatActivity.this);
+        requestQueue.add(jsonObjectRequest);
+      } catch (IOException | JSONException e) {
+        e.printStackTrace();
+      }
+
+      return null;
+    }
+
+    public String getAccessToken() throws IOException {
+      final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
+      final String[] SCOPES = { MESSAGING_SCOPE };
+
+      InputStream serviceAccountStream = ChatActivity.class
+              .getClassLoader().getResourceAsStream("service-account.json");
+      GoogleCredentials googleCredentials = GoogleCredentials
+              .fromStream(serviceAccountStream)
+              .createScoped(Arrays.asList(SCOPES));
+      googleCredentials.refreshIfExpired();
+
+      return googleCredentials.getAccessToken().getTokenValue();
+    }
+  }
+
 }
+
