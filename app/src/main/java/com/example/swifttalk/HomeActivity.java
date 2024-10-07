@@ -1,8 +1,12 @@
 package com.example.swifttalk;
 
 import android.annotation.SuppressLint;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,17 +32,12 @@ public class HomeActivity extends AppCompatActivity {
   RecyclerView recyclerView;
   ChatsAdapter adapter;
   Toolbar toolbar;
+  ImageView menuButton;
 
   private final String userEmail = Objects.requireNonNull(auth.getCurrentUser()).getEmail();
   final List<Chat> chats = new ArrayList<>();
   private EventListener<QuerySnapshot> listener;
 
-  void getChats() {
-    db.collection("chats")
-      .whereArrayContains("users", userEmail)
-      .orderBy("last_message.timestamp", Query.Direction.DESCENDING)
-      .addSnapshotListener(listener);
-  }
 
   @SuppressLint("NotifyDataSetChanged")
   @Override
@@ -47,10 +46,25 @@ public class HomeActivity extends AppCompatActivity {
     EdgeToEdge.enable(this);
     setContentView(R.layout.activity_home);
 
-    //TODO ADD LOGOUT TO TOOLBAR
-
     toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    menuButton = findViewById(R.id.menuBtn);
+    menuButton.setOnClickListener(v -> {
+      PopupMenu popupMenu = new PopupMenu(HomeActivity.this, menuButton);
+      popupMenu.getMenuInflater().inflate(R.menu.menu_home, popupMenu.getMenu());
+
+      popupMenu.setOnMenuItemClickListener(item -> {
+        if (item.getItemId() == R.id.action_logout) {
+          FirebaseAuth.getInstance().signOut();
+          Toast.makeText(HomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+          finish();
+          return true;
+        }
+        return false;
+      });
+      popupMenu.show();
+    });
 
     //TODO FLOATING ACTION BUTTON
 
@@ -76,6 +90,13 @@ public class HomeActivity extends AppCompatActivity {
       v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
       return insets;
     });
+  }
+
+  void getChats() {
+    db.collection("chats")
+      .whereArrayContains("users", userEmail)
+      .orderBy("last_message.timestamp", Query.Direction.DESCENDING)
+      .addSnapshotListener(listener);
   }
 
   @Override
