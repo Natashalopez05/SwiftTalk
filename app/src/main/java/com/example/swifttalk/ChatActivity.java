@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -23,13 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
+import okhttp3.*;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,10 +172,20 @@ public class ChatActivity extends AppCompatActivity {
       Request request = new Request.Builder()
         .url(url)
         .post(body)
-        .addHeader("Authorization","Bearer " + auth.getAccessToken())
+        .addHeader("Authorization","Bearer " + auth.getAccessToken(true))
         .addHeader("Content-Type","application/json")
         .build();
-      client.newCall(request);
+      client.newCall(request).enqueue(new okhttp3.Callback() {
+        @Override
+        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+
+        }
+
+        @Override
+        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+
+        }
+      });
 
     }
 
