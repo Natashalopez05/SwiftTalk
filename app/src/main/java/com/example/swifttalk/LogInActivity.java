@@ -2,6 +2,7 @@ package com.example.swifttalk;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LogInActivity  extends AppCompatActivity {
 
@@ -94,6 +96,22 @@ public class LogInActivity  extends AppCompatActivity {
                 String lastname = documentSnapshot.getString("last_name");
                 Toast.makeText(LogInActivity.this, "Bienvenido: " + name + " " + lastname, Toast.LENGTH_SHORT).show();
                 switchLoadingState(false);
+
+                // Obtain and save FCM token
+                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 ->{
+                  if(!task.isSuccessful()) {
+                    Log.i("FCM Token: ", "Error al obtener el token", task1.getException());
+                    return;
+                  }
+
+                // Obtain the new register token FCM
+                  String token = task1.getResult();
+
+                // Save the token in the database
+                  userRef.update("fcm_token", token)
+                          .addOnCompleteListener(succes -> Log.i("FCM Token", "Token guardado correctamente"))
+                          .addOnFailureListener(e -> Log.e("FCM Token", "Error al guardar el token", e));
+                });
 
                 Intent intent = new Intent(LogInActivity.this, HomeActivity.class);
                 startActivity(intent);

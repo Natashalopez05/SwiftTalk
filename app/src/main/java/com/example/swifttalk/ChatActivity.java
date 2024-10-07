@@ -58,6 +58,10 @@ public class ChatActivity extends AppCompatActivity {
 
     intent = getIntent();
     chat = Parcels.unwrap(intent.getParcelableExtra("chat"));
+    String chatId = intent.getStringExtra("chatId");
+    String chatName = intent.getStringExtra("chatName");
+
+
 
     userName = findViewById(R.id.userName);
     backButton = findViewById(R.id.back_button);
@@ -71,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
 
     userName.setText(((PrivateChat) chat).getOtherUser(currentUserEmail).split("@")[0]);
     // TODO: Add group chat logic
+    userName.setText(chatName);
 
     recyclerView = findViewById(R.id.messagesRecyclerView);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
