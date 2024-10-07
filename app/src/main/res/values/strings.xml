@@ -7,6 +7,7 @@
     <string name="name_hint">Nombre</string>
     <string name="last_name_hint">Apellido</string>
     <string name="login_button">Iniciar Sesión</string>
+    <string name="logout_button">Cerrar Sesión</string>
     <string name="register_button">Registrate</string>
     <string name="login_error">Error al iniciar sesión</string>
     <string name="register_error">Error al registrarse</string>
